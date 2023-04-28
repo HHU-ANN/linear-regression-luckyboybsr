@@ -48,6 +48,7 @@ def lasso(data):
     data = standard(data)
     X, y = read_data()
     X = data_processing(X)
+    y=y.reshape(1,404)
     # 设置超参数
     alpha = 1  # 正则化系数
     beta = 0.0001  # 学习率
@@ -79,7 +80,7 @@ def lasso(data):
             best = w
         # 输出损失函数的值
 
-    print(f'Iteration {i}: Loss = {lassoloss} ')
+    #print(f'Iteration {i}: Loss = {lassoloss} ')
     w =best[0:6,:]
     b=best[6,0]
     return data@w+b
