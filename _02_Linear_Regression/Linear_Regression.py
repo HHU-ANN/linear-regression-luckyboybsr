@@ -18,7 +18,15 @@ def data_processing(X):
     ones = np.ones((X.shape[0], 1))
     X = np.hstack((X, ones))
     return X
+#对测试数据进行统一标准化
+def standard(data):
+    data_mean = np.mean(data)
+    # X_var=np.var(X)#方差
+    data_std = np.std(data)
+    data = (data - data_mean) / data_std
+    return data
 def ridge(data):
+    data=standard(data)
     X, y = read_data()
     X = data_processing(X)
     # 选择模型并初始化参数
@@ -37,6 +45,7 @@ def ridge(data):
 
     
 def lasso(data):
+    data = standard(data)
     X, y = read_data()
     X = data_processing(X)
     # 设置超参数
@@ -70,10 +79,10 @@ def lasso(data):
             best = w
         # 输出损失函数的值
 
-        print(f'Iteration {i}: Loss = {lassoloss} ')
-        w =best[0:6,:]
-        b=best[6,0]
-        return data@w+b
+    print(f'Iteration {i}: Loss = {lassoloss} ')
+    w =best[0:6,:]
+    b=best[6,0]
+    return data@w+b
 
 def read_data(path='./data/exp02/'):
     x = np.load(path + 'X_train.npy')
