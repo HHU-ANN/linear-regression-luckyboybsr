@@ -83,6 +83,7 @@ def lasso(data):
     #print(f'Iteration {i}: Loss = {lassoloss} ')
     w =best[0:6,:]
     b=best[6,0]
+    print(data@w+b)
     return data@w+b
 
 def read_data(path='./data/exp02/'):
