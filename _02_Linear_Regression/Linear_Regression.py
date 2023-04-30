@@ -18,6 +18,19 @@ def data_processing(X):
     ones = np.ones((X.shape[0], 1))
     X = np.hstack((X, ones))
     return X
+#使用01规范法处理数据
+def data_processing_01(X):
+
+    X = np.apply_along_axis(standard_01, 1, X)
+    ones = np.ones((X.shape[0], 1))
+    X = np.hstack((X, ones))
+    return X
+#使用01规范法处理数据
+def standard_01(data):
+    min_val = np.min(data)
+    max_val = np.max(data)
+    scaled_data = (data - min_val) / (max_val - min_val)
+    return scaled_data
 #对测试数据进行统一标准化
 def standard(data):
     data_mean = np.mean(data)
@@ -26,14 +39,15 @@ def standard(data):
     data = (data - data_mean) / data_std
     return data
 def ridge(data):
-    data=standard(data)
+    data=standard_01(data)
     X, y = read_data()
-    X = data_processing(X)
+    X = data_processing_01(X)
     # 选择模型并初始化参数
     w = np.zeros((7, 1))
     y_pre = X @ w  # 计算预测值
     # 定义损失函数
-    alpha = 10  # 正则化系数
+    # alpha = 10  # 正则化系数
+    alpha=1#2023/4/30
     ridgeloss = 2 * (X.T @ X @ w - X.T @ y + alpha * w)
     # 对损失函数中w求偏导,令导数为0，求得w
     w = np.linalg.inv((X.T @ X + alpha * np.eye(np.shape((X.T @ X))[0]))) @ X.T @ y
