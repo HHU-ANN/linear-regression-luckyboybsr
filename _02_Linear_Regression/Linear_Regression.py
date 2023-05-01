@@ -8,13 +8,8 @@ except ImportError as e:
     os.system("sudo pip3 install numpy")
     import numpy as np
 #对数据进行处理(标准化操作并将构建增广矩阵)
-def data_processing(X):
-    # 处理下数据
-    # y = y.reshape(1, 404)
-    X_mean = np.mean(X)
-    # X_var=np.var(X)#方差
-    X_std = np.std(X)
-    X = (X - X_mean) / X_std
+def data_processing_st(X):
+    X = np.apply_along_axis(standard_st, 1, X)
     ones = np.ones((X.shape[0], 1))
     X = np.hstack((X, ones))
     return X
@@ -32,7 +27,7 @@ def standard_01(data):
     scaled_data = (data - min_val) / (max_val - min_val)
     return scaled_data
 #对测试数据进行统一标准化
-def standard(data):
+def standard_st(data):
     data_mean = np.mean(data)
     # X_var=np.var(X)#方差
     data_std = np.std(data)
@@ -59,13 +54,13 @@ def ridge(data):
 
     
 def lasso(data):
-    data = standard(data)
+    data = standard_st(data)
     X, y = read_data()
-    X = data_processing(X)
+    X = data_processing_st(X)
     y=y.reshape(1,404)
     # 设置超参数
-    alpha = 1  # 正则化系数
-    beta = 0.0001  # 学习率
+    alpha = 1000  # 正则化系数
+    beta = 0.00045  # 学习率
 
     # 选择模型并初始化参数
     w = np.zeros((7, 1))
@@ -85,7 +80,7 @@ def lasso(data):
         # 更新参数
         w = w - beta * dw
         # 后边损失函数下降十分缓慢，设置提前停止的条件
-        if (np.abs(min - loss_old) < 0.001):
+        if (np.abs(min - loss_old) < 0.0001):
             print('提前停止！')
             break
         # 获取最小损失时候的参数w
